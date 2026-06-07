@@ -43,24 +43,17 @@ The application enforces a modular separation of concerns, decoupling pure algor
 
 ## Application Output Gallery
 
-### 1. Mathematical Analysis & Corner Detection
+### 1. Harris Corner Detection
 
-* **Eigenvalue ($\lambda$) Analysis Map:** Visualizing the distribution of eigenvalues to differentiate between flat regions, edges, and distinct corner responses.
-
-* **Harris Corner Detection Output:** Final extraction of structural corners and unique geometric vertices overlayed on the source image.
-
+Visualizing structural corners and distinct geometric vertices based on spatial gradient distributions.
 
 ### 2. SIFT Feature Extraction & Description
 
-* **SIFT Scale-Space Keypoints:** Isolating scale-space stable keypoints and local orientation descriptors across the Gaussian scale pyramid.
+Isolating scale-space stable keypoints and local orientation descriptors across the Gaussian scale pyramid.
 
+### 3. Descriptor Matching Performance (SSD & NCC Correlation)
 
-### 3. Descriptor Matching Performance
-
-* **Sum of Squared Differences (SSD) Matching:** Establishing spatial correspondences between keypoints using intensity distance minimization.
-
-* **Normalized Cross-Correlation (NCC) Matching:** Robust illumination-invariant matching utilizing zero-mean normalized correlation fields.
-
+Establishing exact point-to-point correspondences between disparate viewpoints. The framework isolates authentic pairs, computes connection vectors, and flags matching anomalies.
 
 ---
 
@@ -88,7 +81,7 @@ project5-cv-feature-matching/
 ├── mainwindow.ui                  # Qt Designer graphical layout blueprint
 ├── siftdescriptorextractor.cpp    # Scale-space pyramid execution and orientation histograms
 ├── siftdescriptorextractor.h      # SIFT keypoint selection and 128-D descriptor declarations
-└── assets/                        # Execution logs and output image assets (lambda, harris, etc.)
+└── assets/                        # Execution logs and output image assets (harris.jpeg, feature_match.jpeg, etc.)
 
 ```
 
