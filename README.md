@@ -47,13 +47,28 @@ The application enforces a modular separation of concerns, decoupling pure algor
 
 Visualizing structural corners and distinct geometric vertices based on spatial gradient distributions.
 
+<img width="952" height="1012" alt="image" src="https://github.com/user-attachments/assets/f808fb63-8a5b-4f40-acdf-50dfbe41e52a" />
+
+<img width="930" height="937" alt="image" src="https://github.com/user-attachments/assets/5fe5295a-eb47-4c49-a196-78ad5c651a9c" />
+
+
+
 ### 2. SIFT Feature Extraction & Description
 
 Isolating scale-space stable keypoints and local orientation descriptors across the Gaussian scale pyramid.
 
+<img width="937" height="1007" alt="image" src="https://github.com/user-attachments/assets/a50b9103-2340-4437-8554-1a39331198a6" />
+
+
 ### 3. Descriptor Matching Performance (SSD & NCC Correlation)
 
 Establishing exact point-to-point correspondences between disparate viewpoints. The framework isolates authentic pairs, computes connection vectors, and flags matching anomalies.
+
+<img width="1600" height="995" alt="image" src="https://github.com/user-attachments/assets/5dd30d63-87d9-4410-95e6-e738734f805a" />
+
+<img width="1600" height="972" alt="image" src="https://github.com/user-attachments/assets/a1b53930-c019-492d-839d-f3ae2aba1815" />
+
+<img width="1600" height="957" alt="image" src="https://github.com/user-attachments/assets/097f2ad7-cd68-48db-89ec-5964668da462" />
 
 ---
 
