@@ -1,49 +1,130 @@
-# 👁️ Computer Vision: Feature Extraction & Matching (C++ / Qt)
+# Computer Vision Feature Extraction and Matching Pipeline
 
-## 📌 Project Overview
-A C++/Qt Computer Vision application for feature extraction (Harris, SIFT) and matching (SSD, NCC) with real-time performance benchmarking. This desktop application evaluates the performance and computation time of fundamental feature detection algorithms, providing a graphical interface for visual analysis and robotics-related tracking tasks.
-
-## ⚙️ Core Capabilities
-* **Feature Detection (Harris Operator):** Identifies unique keypoints using the Harris Corner Detector and $\lambda$ eigenvalue analysis.
-* **Feature Description (SIFT):** Generates robust, scale-invariant, and rotation-invariant feature descriptors.
-* **Feature Matching Metrics:** Matches features between images using:
-  * Sum of Squared Differences (SSD)
-  * Normalized Cross-Correlation (NCC)
-* **Performance Benchmarking:** Real-time reporting of computation times for each algorithmic stage.
+A high-performance, native C++ desktop application engineered using the Qt framework to evaluate, benchmark, and visualize fundamental computer vision algorithms. This project implements low-level image processing pipelines from mathematical primitives—including Harris Corner Detection, Scale-Invariant Feature Transform (SIFT) descriptors, and multi-metric feature matching (SSD/NCC)—designed for real-time performance tracking and robotics-related spatial tracking tasks.
 
 ---
 
-## 📸 Application Output Gallery
+## Technical Pipeline Architecture
+
+The application enforces a modular separation of concerns, decoupling pure algorithmic matrix manipulations from the Qt GUI rendering thread to ensure fluent interface updates during heavy computational loads.
+
+```text
++-------------------------------------------------------------------------+
+|                                QT GUI LAYER                             |
+|          (Image Canvas Renderers, Metric Selection, Live Timers)        |
++-------------------------------------------------------------------------+
+                                    |
+                                    v
++-------------------------------------------------------------------------+
+|                     ALGORITHMIC CORE PIPELINE (C++)                     |
+|   [Harris Operator]  -->  [SIFT Descriptor]  -->  [Matching Engine]    |
++-------------------------------------------------------------------------+
+                                    |
+                                    v
++-------------------------------------------------------------------------+
+|                       MATHEMATICAL PRIMITIVES                           |
+|        (Gaussian Blurring, Image Gradients, Eigenvalue Solvers)         |
++-------------------------------------------------------------------------+
+
+```
+
+### 1. Core Algorithmic Capabilities
+
+* **Harris Corner Detection Subsystem:** Identifies highly distinct structural keypoints by computing localized image gradient distributions ($I_x, I_y$). The detector constructs the second-moment matrix (Structure Tensor) for every pixel, utilizing $\lambda$ eigenvalue analysis and a tunable sensitivity scoring parameter ($R$) to isolate robust corners while suppressing edge responses.
+* **Scale-Invariant Feature Transform (SIFT):** Extracts robust scale-space keypoints and computes local descriptor orientations. The pipeline constructs a Difference-of-Gaussians (DoG) pyramid to establish scale invariance, generating a 128-dimensional descriptor vector for each keypoint based on localized gradient orientation histograms, ensuring immunity to rotation, illumination shifts, and scaling mutations.
+* **Descriptor Matching Engine:** Implements dual-metric nearest-neighbor matching profiles to map corresponding keypoints across disparate image viewpoints:
+* **Sum of Squared Differences (SSD):** An intensity-dependent distance metric optimized for computational speed.
+* **Normalized Cross-Correlation (NCC):** An illumination-invariant matching metric that normalizes local patch intensities, ensuring reliable tracking under varied lighting vectors.
+
+
+* **Performance Benchmarking Suite:** Embeds precise microsecond-grade software execution timers around each core algorithmic pass, providing real-time latency diagnostics to measure algorithmic complexity directly within the user interface.
+
+---
+
+## Application Output Gallery
 
 ### 1. Harris Corner Detection
-Detecting structural corners and unique keypoints using the Harris Operator based on local gradient distribution.
 
-![Harris Corners Output 1](assets/harris.jpeg)
-![Harris Corners Output 2](assets/harris1.jpeg)
+Visualizing structural corners and distinct geometric vertices based on spatial gradient distributions.
 
 ### 2. SIFT Feature Extraction
-Extracting robust keypoints and generating scale/rotation-invariant descriptors using the Difference of Gaussians (DoG) pyramid.
 
-![SIFT Keypoints Output](assets/sift.jpeg)
+Isolating scale-space stable keypoints and local orientation descriptors across Scale-Space pyramids.
 
-### 3. Feature Matching (SSD & NCC)
-Establishing correspondences between two different images by matching descriptors. The application highlights matched points and visualizes the connecting vectors.
+### 3. Feature Matching (SSD & NCC Correlation)
 
-![Feature Matching Output 1](assets/feature_match.jpeg)
-![Feature Matching Output 2](assets/feature_match1.jpeg)
-![Feature Matching Output 3](assets/feature_match2.jpeg)
+Establishing exact point-to-point correspondences between disparate viewpoints. The framework isolates authentic pairs, computes connection vectors, and flags matching anomalies.
 
 ---
 
-## 🛠️ Tech Stack & Architecture
-* **Language:** C++ (Object-Oriented Design)
-* **GUI Framework:** Qt (Widgets / UI Designer)
-* **Build System:** CMake
-* **Architecture:** Modular separation of concerns (Core algorithms separated from GUI logic).
+## Key Engineering Standards Applied
 
-## 🚀 Build & Run Instructions
+* **Object-Oriented Image Processing Design:** Avoids monolithic design patterns by encapsulating individual algorithms into dedicated C++ translation units, allowing runtime substitution of feature extraction engines.
+* **Deterministic Memory Management:** All image transformation buffers, gradient maps, and descriptor arrays utilize scope-bound memory allocation profiles to eliminate memory leaks during high-frequency real-time execution.
+* **Illumination-Invariant Normalization:** The custom NCC matching layer implements rigorous zero-mean standardization across sub-matrix fields, preventing image exposure variations from corrupting tracking accuracy.
+* **Clean Toolchain Compliance:** The project builds cleanly via CMake using strict configuration warning flags (`-Wall -Wextra`), optimizing the underlying matrix structures for low runtime overhead.
+
+---
+
+## Repository Directory Tree
+
+```text
+project5-cv-feature-matching/
+├── CMakeLists.txt            # Master cross-platform build automation definitions
+├── Inc/                      # Public Algorithmic Headers
+│   ├── HarrisDetector.h      # Structure tensor and eigenvalue scoring classes
+│   ├── SiftExtractor.h       # Scale-space pyramid and descriptor generators
+│   ├── FeatureMatcher.h      # SSD and NCC distance evaluation engines
+│   └── ImageProcessor.h      # Matrix transformation and blurring primitives
+├── Src/                      # Algorithmic Source Implementations
+│   ├── HarrisDetector.cpp    # Gradient tracking and corner suppression
+│   ├── SiftExtractor.cpp     # Orientation histogram calculations
+│   ├── FeatureMatcher.cpp    # Multi-metric vector mapping loops
+│   └── main.cpp              # Master application initialization entrypoint
+├── UI/                       # Graphical User Interface Modules
+│   ├── MainWindow.h          # Canvas management and benchmarking slots
+│   ├── MainWindow.cpp        # Image loading and multi-threaded GUI routing
+│   └── MainWindow.ui         # Qt Designer layout blueprints
+└── assets/                   # Execution logs and output image assets
+
+```
+
+---
+
+## Toolchain Setup and Deployment
 
 ### Prerequisites
-* CMake (Version 3.5 or higher)
-* Qt Creator / Qt5 or Qt6 libraries
-* C++ Compiler (GCC, Clang, or MSVC)
+
+* Build Suite: CMake (Version 3.5 or higher).
+* UI Framework: Qt Creator / Qt5 or Qt6 Development Packages.
+* Toolchain: Modern C++ Compiler (GCC, Clang, or MSVC supporting C++11 or higher).
+
+### Build Pipeline
+
+1. Clone the repository and its structural directory layout:
+```bash
+git clone git@github.com:lyan2003/Modern-CPP-Computer-Vision-Feature-Extraction-and-Matching.git
+
+```
+
+
+2. Navigate to the project root and generate the build tree:
+```bash
+mkdir build && cd build
+cmake ..
+
+```
+
+
+3. Compile the executable using the native build tools:
+```bash
+cmake --build .
+
+```
+
+
+4. Run the generated UI executable artifact:
+```bash
+./CVFeatureMatcherApp
+
+```
